@@ -1,15 +1,24 @@
 # Braze User Export to Extract
-This is a python 3 script which automates the process of making getting Braze Segment export data, and converting it into a csv file.
+This is a python 3 script which simplifies the process of getting Braze Segment export data from AWS S3, combined them, and converting it into a csv file.
 
+## Requirements
 The following are required:
-* Access Id and Secret Key from [Amazon AWS S3](https://console.aws.amazon.com/console/) with read permission
-* Access to the Braze dashboard with a segment already created, and a Braze API key with segment export permissions.
+* Access Id and Secret Key from [Amazon AWS S3](https://console.aws.amazon.com/console/) with read permission to the necessary bucket
+* Access to the Braze dashboard with a segment already created, and a [Braze API key](https://www.braze.com/docs/api/api_key/) with segment export permissions.
 * [python3](https://www.python.org/) installed
 	* Optional, [venv](https://docs.python.org/3/library/venv.html) installed
 
 ## Process Steps
 The following is an outline of the process:
 * Make an API call to the [Braze User by Segment Export](https://www.braze.com/docs/api/endpoints/export/user_data/post_users_segment/) endpoint using a predefined [segment](https://www.braze.com/docs/user_guide/engagement_tools/segments/creating_a_segment/).
+	* Example Curl request: ```curl --location --request POST 'https://rest.iad-01.braze.com/users/export/segment' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer [API-KEY]' \
+--data-raw '{
+    "segment_id" : "[SEGMENT-ID],
+    "fields_to_export" : ["external_id","email","first_name"]
+}
+'```
 * Edit the `.env` with the credentials if not already done
 	* The `s3bucketname` and `s3path` maps to the `AWS S3 Bucket Name` and `AWS S3 Bucket Folder` respectively in the AWS S3 partner setup.
 	* ![braze_s3_setup](/img/braze_s3_setup.png)
@@ -20,6 +29,7 @@ The following is an outline of the process:
 	* Format will be `/[YYYY-MM-DD]/[export_object_prefix]`
 	* If set to blank `""`, then all output files in the folder will be processed
 	* If set to today `/[YYYY-MM-DD]`, all exports for that date will be processed
+* Edit the `.env` with any custom `segmentexportfields` for output if using `convertcsv` ie `external_id,email`
 * Run the script using `python3 process_s3.py` to read the export and convert it a csv format.
  	* Results are saves it to the `outpath`
 	* If `convertcsv` is disabled, then results will just be combined
@@ -40,7 +50,7 @@ The easiest way to setup the configuration is to create a `.env` file in the sam
 |s3path|AWS Bucket Path|s3_bucket_folder|
 |segmentid|Braze Segment Id|braze_export_segment_id|
 |s3exportpath|S3 Export path. Braze generates this using export date `YYYY-MM-DD` and the `export_object_prefix` from the api export. Use this to filter the results. Some `/[YYYY-MM-DD]/` or `/` may also be use but be aware of the data that would be filtered when using this.|"/[YYYY-MM-DD]/[export_object_prefix]"|
-|segmentexportfields|Fields to convert from json to csv|external_id,attr_1,attr_2|
+|segmentexportfields|Fields to convert from json to csv comma separated|external_id,attr_1,attr_2|
 |convertcsv|Boolean - true, enable to convert the json to csv. Otherwise the files will just be combined. Use with `segmentexportfields`.|true|
 |outputpath|Folder to place the results in. Make sure the folder exist.|done|
 |outputname|Output File prefix name|braze_export|
