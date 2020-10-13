@@ -1,10 +1,11 @@
-# Braze User Export to Extract
+# Braze User Export Extract from AWS S3
 This is a python 3 script which simplifies the process of getting Braze Segment export data from AWS S3, combined them, and converting it into a csv file.
 
 ## Requirements
 The following are required:
 * Access Id and Secret Key from [Amazon AWS S3](https://console.aws.amazon.com/console/) with read permission to the necessary bucket
-* Access to the Braze dashboard with a segment already created, and a [Braze API key](https://www.braze.com/docs/api/api_key/) with segment export permissions.
+* Access to the Braze dashboard with a segment already created for the desire audience
+* A [Braze API key](https://www.braze.com/docs/api/api_key/) with segment export permissions.
 * [python3](https://www.python.org/) installed
 	* Optional, [venv](https://docs.python.org/3/library/venv.html) installed
 
@@ -19,6 +20,12 @@ The following is an outline of the process:
     "fields_to_export" : ["external_id","email","first_name"]
 }
 '```
+	* Example Response: ```{
+    "object_prefix": "[export_object_prefix]",
+    "url": null,
+    "message": "success"
+}
+	```
 * Edit the `.env` with the credentials if not already done
 	* The `s3bucketname` and `s3path` maps to the `AWS S3 Bucket Name` and `AWS S3 Bucket Folder` respectively in the AWS S3 partner setup.
 	* ![braze_s3_setup](/img/braze_s3_setup.png)
