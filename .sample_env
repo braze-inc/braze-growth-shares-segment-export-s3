@@ -1,0 +1,11 @@
+s3accessid=s3access_abc123
+s3secretkey=s3key_abc123
+s3bucketname=s3bucketname
+s3path=s3_bucket_folder
+s3exportpath="/[YYYY-MM-DD]/[export_object_prefix]"
+segmentid=braze_export_segment_id
+segmentexportfields=external_id,attr_1,attr_2
+convertcsv=true
+outputpath=done
+outputname=braze_export
+outputlog=true
