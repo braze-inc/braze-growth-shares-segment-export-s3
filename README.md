@@ -20,12 +20,11 @@ The following is an outline of the process:
     "fields_to_export" : ["external_id","email","first_name"]
 }
 '```
-	* Example Response: ```{
+	* Example Response: ``` {
     "object_prefix": "[export_object_prefix]",
     "url": null,
     "message": "success"
-}
-	```
+} ```
 * Edit the `.env` with the credentials if not already done
 	* The `s3bucketname` and `s3path` maps to the `AWS S3 Bucket Name` and `AWS S3 Bucket Folder` respectively in the AWS S3 partner setup.
 	* ![braze_s3_setup](/img/braze_s3_setup.png)
